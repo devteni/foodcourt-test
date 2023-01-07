@@ -8,11 +8,13 @@ import * as bcrypt from 'bcrypt';
 
 @Controller('auth')
 export class AuthController {
-  constructor(@InjectModel() private readonly knex: Knex, private readonly authService: AuthService) {}
+  constructor(
+    @InjectModel() private readonly knex: Knex,
+    private readonly authService: AuthService,
+  ) {}
 
   @Post('/signup')
   async signup(@Body() createUserDto: CreateUserDto) {
-    console.log('signup');
     // check if user already exists
     const existingUser = await this.knex
       .table('users')
@@ -23,18 +25,15 @@ export class AuthController {
       return { message: 'This user already exists. Log in instead.' };
     }
 
-    // hash password
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
 
-    // create user with hashed password
     const user = await this.knex.table('users').returning('*').insert({
       email: createUserDto.email,
       password: hashedPassword,
       role: createUserDto.role,
     });
 
-    // return user details
     return { message: 'User created successfully', data: user[0] };
   }
 

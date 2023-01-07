@@ -1,7 +1,17 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
+import {
+  Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+} from '@nestjs/common';
 import { BrandsService } from './brands.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
-import { UpdateBrandDto } from './dto/update-brand.dto';
+import { CreateBrandMealAddonDto } from './dto/create-meal-addon.dto';
+import { CreateMealCategory } from './dto/create-meal-category.dto';
+import { UpdateMealAddonDto } from './dto/update-meal-addon.dto';
 
 @Controller('brands')
 export class BrandsController {
@@ -12,23 +22,46 @@ export class BrandsController {
     return this.brandsService.create(createBrandDto);
   }
 
-  @Get()
-  findAll() {
-    return this.brandsService.findAll();
+  @Post(':brandId/addons')
+  createBrandMealAddon(
+    @Param('brandId') brandId: string,
+    @Body() MealAddonDto: CreateBrandMealAddonDto,
+  ) {
+    return this.brandsService.createMealAddon(+brandId, MealAddonDto);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.brandsService.findOne(+id);
+  @Get(':brandId/addons')
+  findAllBrandMealAddons(@Param('brandId') brandId: string) {
+    return this.brandsService.findAllBrandMeals(+brandId);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBrandDto: UpdateBrandDto) {
-    return this.brandsService.update(+id, updateBrandDto);
+  @Get(':brandId/addons/:addonId')
+  findOneBrandMealAddon(
+    @Param('brandId') brandId: string,
+    @Param('addonId') addonId: string,
+  ) {
+    return this.brandsService.findOneBrandMeal(+brandId);
   }
 
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.brandsService.remove(+id);
+  @Patch(':brandId/addons/:addonId')
+  update(
+    @Param('brandId') brandId: string,
+    @Param('addonId') addonId: string,
+    @Body() updateBrandDto: UpdateMealAddonDto,
+  ) {
+    return this.brandsService.updateBrandMeal(+brandId, updateBrandDto);
+  }
+
+  @Delete(':brandId/addons/:addonId')
+  remove(@Param('brandId') id: string, @Param('addonId') addonId: string) {
+    return this.brandsService.removeBrandMeal(+id);
+  }
+
+  @Post(':brandId/addon-categories')
+  createBrandMealCategory(
+    @Param('brandId') brandId: string,
+    @Body() mealCategory: CreateMealCategory,
+  ) {
+    return this.brandsService.createMealCategory(+brandId, mealCategory.name);
   }
 }

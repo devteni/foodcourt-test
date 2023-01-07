@@ -1,26 +1,51 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
+import { Knex } from 'knex';
 import { CreateBrandDto } from './dto/create-brand.dto';
-import { UpdateBrandDto } from './dto/update-brand.dto';
+import { CreateBrandMealAddonDto } from './dto/create-meal-addon.dto';
+import { UpdateMealAddonDto } from './dto/update-meal-addon.dto';
 
 @Injectable()
 export class BrandsService {
-  create(createBrandDto: CreateBrandDto) {
-    return 'This action adds a new brand';
+  constructor(private readonly knex: Knex) {}
+  async create(createBrandDto: CreateBrandDto) {
+    const existingBrand = await this.knex
+      .table('brands')
+      .where('name', createBrandDto.name)
+      .first();
+
+    if (existingBrand) {
+      return new BadRequestException('Brand already exists.');
+    }
+
+    const brand = await this.knex
+      .table('brands')
+      .returning('*')
+      .insert(createBrandDto);
+
+    return { message: 'Brand registered successfully', data: brand[0] };
   }
 
-  findAll() {
+  async createMealAddon(brandId: number, payload: CreateBrandMealAddonDto) {
+    return 'Addon created';
+  }
+
+  findAllBrandMeals(brandId: number) {
     return `This action returns all brands`;
   }
 
-  findOne(id: number) {
+  findOneBrandMeal(id: number) {
     return `This action returns a #${id} brand`;
   }
 
-  update(id: number, updateBrandDto: UpdateBrandDto) {
+  updateBrandMeal(id: number, updateMealDto: UpdateMealAddonDto) {
     return `This action updates a #${id} brand`;
   }
 
-  remove(id: number) {
+  removeBrandMeal(id: number) {
     return `This action removes a #${id} brand`;
+  }
+
+  createMealCategory(brandId: number, categoryName: string) {
+    return 'Category created';
   }
 }

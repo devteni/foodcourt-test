@@ -27,11 +27,38 @@ export class BrandsService {
   }
 
   async createMealAddon(brandId: number, payload: CreateBrandMealAddonDto) {
-    return 'Addon created';
+    const existingMeal = await this.knex
+      .table('meal_addons')
+      .where('name', payload.name)
+      .andWhere('brand_id', brandId)
+      .first();
+
+    if (existingMeal) {
+      throw new BadRequestException(
+        'Meal Addon already exists for this brand.',
+      );
+    }
+
+    const addon = await this.knex
+      .table('meal_addons')
+      .returning('*')
+      .insert({ ...payload, brand_id: brandId });
+
+    return { message: 'Addon created successfully', data: addon[0] };
   }
 
-  findAllBrandMeals(brandId: number) {
-    return `This action returns all brands`;
+  async findAllBrandMeals(brandId: number) {
+    // check if brand exists
+    const existingBrand = await this.knex
+      .table('brands')
+      .where('id', brandId)
+      .first();
+
+    if (!existingBrand) {
+      throw new BadRequestException('Brand does not exist.');
+    }
+
+    // retrieve a paginated list of all brands meal addons
   }
 
   findOneBrandMeal(id: number) {

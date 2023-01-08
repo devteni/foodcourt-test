@@ -19,11 +19,11 @@ import { UpdateMealAddonDto } from './dto/update-meal-addon.dto';
 
 @Controller('brands')
 @UseGuards(JwtAuthGuard)
+@Roles(Role.Admin)
 export class BrandsController {
   constructor(private readonly brandsService: BrandsService) {}
 
   @Post()
-  @Roles(Role.Admin)
   create(@Body() createBrandDto: CreateBrandDto) {
     return this.brandsService.create(createBrandDto);
   }

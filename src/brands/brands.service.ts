@@ -1,12 +1,13 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Knex } from 'knex';
+import { InjectModel } from 'nest-knexjs';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { CreateBrandMealAddonDto } from './dto/create-meal-addon.dto';
 import { UpdateMealAddonDto } from './dto/update-meal-addon.dto';
 
 @Injectable()
 export class BrandsService {
-  constructor(private readonly knex: Knex) {}
+  constructor(@InjectModel() private readonly knex: Knex) {}
   async create(createBrandDto: CreateBrandDto) {
     const existingBrand = await this.knex
       .table('brands')
@@ -14,7 +15,7 @@ export class BrandsService {
       .first();
 
     if (existingBrand) {
-      return new BadRequestException('Brand already exists.');
+      throw new BadRequestException('Brand already exists.');
     }
 
     const brand = await this.knex

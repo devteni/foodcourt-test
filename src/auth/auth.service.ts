@@ -32,7 +32,7 @@ export class AuthService {
     const matchPass = await bcrypt.compare(pass, user.password);
 
     if (!matchPass) {
-      return new UnauthorizedException();
+      throw new UnauthorizedException();
     }
 
     return { email: user.email, role: user.role };
@@ -42,7 +42,7 @@ export class AuthService {
     // This login method is used to generate access token for the verified `user` argument
 
     // generate access token
-    const payload = { username: user.email, sub: user.id };
+    const payload = { email: user.email, sub: user.id };
     const token = await this.generateAccessToken(payload);
 
     // return user details and token

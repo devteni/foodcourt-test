@@ -6,6 +6,7 @@ import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
 import { KnexModule } from 'nest-knexjs';
 import * as dotenv from 'dotenv';
+import { BrandsModule } from './brands/brands.module';
 dotenv.config();
 
 const { DB_HOST, DB_PORT, DB_USER, DB_PASS } = process.env;
@@ -33,6 +34,7 @@ console.log(process.env.DB_USER);
         },
       },
     }),
+    BrandsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

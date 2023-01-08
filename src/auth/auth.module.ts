@@ -8,7 +8,14 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { JwtStrategy } from './strategies/jwt.strategy';
 
 @Module({
-  imports: [ConfigModule, PassportModule, JwtModule.register({})],
+  imports: [
+    ConfigModule,
+    PassportModule,
+    JwtModule.register({
+      secret: process.env.JWT_SECRET,
+      signOptions: { expiresIn: process.env.JWT_EXPIRY },
+    }),
+  ],
   providers: [AuthService, ConfigService, LocalStrategy, JwtStrategy],
   controllers: [AuthController],
   exports: [JwtModule, PassportModule, JwtStrategy],

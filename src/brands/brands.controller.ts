@@ -7,10 +7,14 @@ import {
   Param,
   Delete,
   UseGuards,
+  Query,
+  Request,
+  Req,
 } from '@nestjs/common';
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
+import paginator from 'src/utils/paginator';
 import { BrandsService } from './brands.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { CreateBrandMealAddonDto } from './dto/create-meal-addon.dto';
@@ -37,8 +41,36 @@ export class BrandsController {
   }
 
   @Get(':brandId/addons')
-  findAllBrandMealAddons(@Param('brandId') brandId: string) {
-    return this.brandsService.findAllBrandMeals(+brandId);
+  async findAllBrandMealAddons(
+    @Req() req,
+    @Param('brandId') brandId: string,
+    @Query('size') size: string,
+    @Query('page') page: string,
+  ) {
+    const pageNumber = page !== undefined ? +page : 1;
+    const pageSize = size !== undefined ? +size : 5;
+    const baseUrl = `${req.protocol}://${req.get('Host')}${req.originalUrl}`;
+
+    const limit = pageSize < 1 || pageSize > 100 ? 5 : pageSize;
+    const offset = paginator.offset(pageNumber, pageSize);
+    const { addons, addonCount } = await this.brandsService.findAllBrandMeals(
+      +brandId,
+      limit,
+      offset,
+    );
+
+    const pointers = paginator.pageUrls(pageNumber, limit, addonCount, baseUrl);
+
+    console.log(baseUrl);
+
+    return {
+      data: {
+        items: addons,
+        previous_page: pointers.previous,
+        next_page: pointers.next,
+        total: addonCount,
+      },
+    };
   }
 
   @Get(':brandId/addons/:addonId')

@@ -34,7 +34,7 @@ export class RolesGuard implements CanActivate {
     } = context.switchToHttp().getRequest();
 
     if (!authorization) {
-        throw new UnauthorizedException();
+      throw new UnauthorizedException();
     }
 
     const token = authorization.split(' ')[1];

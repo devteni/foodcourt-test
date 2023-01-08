@@ -47,7 +47,7 @@ export class BrandsService {
     return { message: 'Addon created successfully', data: addon[0] };
   }
 
-  async findAllBrandMeals(brandId: number) {
+  async findAllBrandMeals(brandId: number, limit = 5, offset = 0) {
     // check if brand exists
     const existingBrand = await this.knex
       .table('brands')
@@ -59,6 +59,11 @@ export class BrandsService {
     }
 
     // retrieve a paginated list of all brands meal addons
+    const query = this.knex.table('meal_addons').where('brand_id', brandId);
+    const addons = await query.limit(limit).offset(offset);
+    const addonCount = (await query.count())[0]['count'];
+
+    return { addons, addonCount };
   }
 
   findOneBrandMeal(id: number) {

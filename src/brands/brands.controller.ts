@@ -8,7 +8,6 @@ import {
   Delete,
   UseGuards,
   Query,
-  Request,
   Req,
 } from '@nestjs/common';
 import { Roles } from 'src/auth/decorators/roles.decorator';
@@ -78,21 +77,25 @@ export class BrandsController {
     @Param('brandId') brandId: string,
     @Param('addonId') addonId: string,
   ) {
-    return this.brandsService.findOneBrandMeal(+brandId);
+    return this.brandsService.findOneBrandMeal(+brandId, +addonId);
   }
 
   @Patch(':brandId/addons/:addonId')
   update(
     @Param('brandId') brandId: string,
     @Param('addonId') addonId: string,
-    @Body() updateBrandDto: UpdateMealAddonDto,
+    @Body() updateMealDto: UpdateMealAddonDto,
   ) {
-    return this.brandsService.updateBrandMeal(+brandId, updateBrandDto);
+    return this.brandsService.updateBrandMeal({
+      brandId: +brandId,
+      addonId: +addonId,
+      updateMealDto,
+    });
   }
 
   @Delete(':brandId/addons/:addonId')
-  remove(@Param('brandId') id: string, @Param('addonId') addonId: string) {
-    return this.brandsService.removeBrandMeal(+id);
+  remove(@Param('brandId') brandId: string, @Param('addonId') addonId: string) {
+    return this.brandsService.removeBrandMeal(+brandId, +addonId);
   }
 
   @Post(':brandId/addon-categories')

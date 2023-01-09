@@ -1,5 +1,6 @@
 import {
   BadRequestException,
+  ConflictException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -36,29 +37,29 @@ export class BrandsService {
       throw new BadRequestException('Brand already exists.');
     }
 
-    const brand = await this.db('brands').returning('*').insert(createBrandDto);
+    const brand = await this.db<Brand>('brands')
+      .insert(createBrandDto)
+      .returning('*');
 
     return { message: 'Brand registered successfully', data: brand[0] };
   }
 
   async createMealAddon(brandId: number, payload: CreateBrandMealAddonDto) {
-    const existingMeal = await this.db('meal_addons')
+    const existingMeal = await this.db<Addon>('meal_addons')
       .where('name', payload.name)
       .andWhere('brand_id', brandId)
       .first();
 
     if (existingMeal) {
-      throw new BadRequestException(
-        'Meal Addon already exists for this brand.',
-      );
+      throw new ConflictException('Meal Addon already exists for this brand.');
     }
 
-    let categoryId: number | null = null;
+    let categoryId: string | number | null = null;
     let categoryName: string | null = null;
 
     if (payload.category) {
       // check if category exists
-      const existingCategory = await this.knex('meal_categories')
+      const existingCategory = await this.db<Category>('meal_categories')
         .where({
           name: payload.category,
           brand_id: brandId,
@@ -89,7 +90,7 @@ export class BrandsService {
 
     return {
       message: 'Addon created successfully',
-      data: { ...addon[0], categoryName },
+      data: { ...addon[0], category_name: categoryName },
     };
   }
 
@@ -192,12 +193,12 @@ export class BrandsService {
       throw new BadRequestException('Brand does not exist.');
     }
 
-    const existingCategory = await this.db('meal_categories')
+    const existingCategory = await this.db<Category>('meal_categories')
       .where('name', categoryName)
       .first();
 
     if (existingCategory) {
-      throw new BadRequestException(
+      throw new ConflictException(
         'Meal Category already exists for this brand.',
       );
     }
@@ -206,6 +207,6 @@ export class BrandsService {
       .insert({ name: categoryName, brand_id: brandId })
       .returning('*');
 
-    return { data: { ...mealCategory[0], brandName: existingBrand.name } };
+    return { data: { ...mealCategory[0], brand_name: existingBrand.name } };
   }
 }

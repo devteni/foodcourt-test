@@ -1,11 +1,16 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from './dto/create-user.dto';
-import { TokenPayload } from 'index';
+import { TokenPayload, User } from 'index';
+import { Role } from './enums/role.enum';
 
 @Injectable()
 export class AuthService {
@@ -48,19 +53,28 @@ export class AuthService {
       .first();
 
     if (existingUser) {
-      return { message: 'This user already exists. Log in instead.' };
+      throw new BadRequestException(
+        'This user already exists. Log in instead.',
+      );
     }
 
     const salt = await bcrypt.genSalt();
     const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
 
-    const user = await this.db('users').returning('*').insert({
-      email: createUserDto.email,
-      password: hashedPassword,
-      role: createUserDto.role,
-    });
+    const userRole = createUserDto.role === 'admin' ? Role.Admin : Role.Regular;
 
-    return { message: 'User created successfully', data: user[0] };
+    const user = await this.db<User>('users')
+      .insert({
+        email: createUserDto.email,
+        password: hashedPassword,
+        role: userRole,
+      })
+      .returning('*');
+
+    const payload = { email: user[0].email, sub: user[0].id };
+    const token = await this.generateAccessToken(payload);
+
+    return { message: 'User created successfully', data: user[0], token };
   }
 
   async login(user) {

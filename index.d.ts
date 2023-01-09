@@ -13,7 +13,7 @@ interface Addon {
   description: string;
   price: number;
   brand_id?: number;
-  category_id?: number;
+  category_id?: number | string;
 }
 
 interface Category {

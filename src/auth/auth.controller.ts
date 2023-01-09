@@ -4,7 +4,6 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { LocalAuthGuard } from './guards/local-auth.guard';
 import { Knex } from 'knex';
 import { InjectModel } from 'nest-knexjs';
-import * as bcrypt from 'bcrypt';
 
 @Controller('auth')
 export class AuthController {

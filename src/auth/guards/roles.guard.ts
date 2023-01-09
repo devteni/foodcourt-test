@@ -51,9 +51,7 @@ export class RolesGuard implements CanActivate {
         return requiredRoles.includes(user.role);
       }
     } catch (error) {
-      throw new UnauthorizedException(
-        'This user is not privileged to carry out this action',
-      );
+      throw new UnauthorizedException();
     }
   }
 }

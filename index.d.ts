@@ -26,3 +26,8 @@ interface Brand {
   id?: string;
   name: string;
 }
+
+type TokenPayload = {
+  email: string;
+  sub: string | number;
+};

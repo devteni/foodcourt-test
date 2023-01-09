@@ -13,7 +13,7 @@ import {
 import { Roles } from 'src/auth/decorators/roles.decorator';
 import { Role } from 'src/auth/enums/role.enum';
 import { JwtAuthGuard } from 'src/auth/guards/jwt-auth.guard';
-import paginator from 'src/utils/paginator';
+import paginator from 'src/lib/paginator';
 import { BrandsService } from './brands.service';
 import { CreateBrandDto } from './dto/create-brand.dto';
 import { CreateBrandMealAddonDto } from './dto/create-meal-addon.dto';
@@ -58,9 +58,13 @@ export class BrandsController {
       offset,
     );
 
-    const pointers = paginator.pageUrls(pageNumber, limit, addonCount, baseUrl);
-
-    console.log(baseUrl);
+    const entriesCount = parseInt(addonCount.toString(), 10);
+    const pointers = paginator.pageUrls(
+      pageNumber,
+      limit,
+      entriesCount,
+      baseUrl,
+    );
 
     return {
       data: {

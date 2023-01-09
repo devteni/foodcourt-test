@@ -15,26 +15,7 @@ export class AuthController {
 
   @Post('/signup')
   async signup(@Body() createUserDto: CreateUserDto) {
-    // check if user already exists
-    const existingUser = await this.knex
-      .table('users')
-      .where('email', createUserDto.email)
-      .first();
-
-    if (existingUser) {
-      return { message: 'This user already exists. Log in instead.' };
-    }
-
-    const salt = await bcrypt.genSalt();
-    const hashedPassword = await bcrypt.hash(createUserDto.password, salt);
-
-    const user = await this.knex.table('users').returning('*').insert({
-      email: createUserDto.email,
-      password: hashedPassword,
-      role: createUserDto.role,
-    });
-
-    return { message: 'User created successfully', data: user[0] };
+    return await this.authService.signup(createUserDto);
   }
 
   // Local auth guard verifies the user. This method is used to generate an access token for the user

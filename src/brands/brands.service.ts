@@ -12,16 +12,19 @@ import { UpdateMealAddonDto } from './dto/update-meal-addon.dto';
 
 @Injectable()
 export class BrandsService {
-  constructor(@InjectModel() private readonly knex: Knex) {}
+  protected db: Knex;
+  constructor(@InjectModel() private readonly knex: Knex) {
+    this.db = this.knex;
+  }
 
   async findBrandById(id: number) {
-    const brand = await this.knex.table<Brand>('brands').where('id', id).first();
+    const brand = await this.db<Brand>('brands').where('id', id).first();
 
     return brand;
   }
 
   async findBrandByName(name: string) {
-    const brand = await this.knex.table('brands').where('name', name).first();
+    const brand = await this.db('brands').where('name', name).first();
 
     return brand;
   }
@@ -33,17 +36,13 @@ export class BrandsService {
       throw new BadRequestException('Brand already exists.');
     }
 
-    const brand = await this.knex
-      .table('brands')
-      .returning('*')
-      .insert(createBrandDto);
+    const brand = await this.db('brands').returning('*').insert(createBrandDto);
 
     return { message: 'Brand registered successfully', data: brand[0] };
   }
 
   async createMealAddon(brandId: number, payload: CreateBrandMealAddonDto) {
-    const existingMeal = await this.knex
-      .table('meal_addons')
+    const existingMeal = await this.db('meal_addons')
       .where('name', payload.name)
       .andWhere('brand_id', brandId)
       .first();
@@ -70,8 +69,7 @@ export class BrandsService {
         categoryId = existingCategory.id;
         categoryName = existingCategory.name;
       } else {
-        const newCategory = await this.knex
-          .table('meal_categories')
+        const newCategory = await this.db('meal_categories')
           .returning('*')
           .insert({ name: payload.category, brand_id: brandId });
 
@@ -80,8 +78,7 @@ export class BrandsService {
       }
     }
 
-    const addon = await this.knex
-      .table<Addon>('meal_addons')
+    const addon = await this.db<Addon>('meal_addons')
       .insert({
         name: payload.name,
         price: payload.price,
@@ -105,7 +102,7 @@ export class BrandsService {
     }
 
     // retrieve a paginated list of all brands meal addons
-    const query = this.knex.table('meal_addons').where('brand_id', brandId);
+    const query = this.db('meal_addons').where('brand_id', brandId);
     const addons = await query.limit(limit).offset(offset);
     const addonCount = (await query.count())[0]['count'];
 
@@ -119,8 +116,7 @@ export class BrandsService {
       throw new BadRequestException('Brand does not exist.');
     }
 
-    const addon = await this.knex
-      .table('meal_addons')
+    const addon = await this.db('meal_addons')
       .where('id', addonId)
       .andWhere('brand_id', brandId)
       .first();
@@ -147,8 +143,7 @@ export class BrandsService {
       throw new BadRequestException('Brand does not exist.');
     }
 
-    const addon = await this.knex
-      .table('meal_addons')
+    const addon = await this.db('meal_addons')
       .where('id', addonId)
       .andWhere('brand_id', brandId)
       .first();
@@ -157,8 +152,7 @@ export class BrandsService {
       throw new NotFoundException('Meal addon does not exist for this brand');
     }
 
-    const updatedAddon = await this.knex
-      .table('meal_addons')
+    const updatedAddon = await this.db('meal_addons')
       .returning('*')
       .where({ id: addonId })
       .update({
@@ -175,8 +169,7 @@ export class BrandsService {
       throw new BadRequestException('Brand does not exist.');
     }
 
-    const addon = await this.knex
-      .table('meal_addons')
+    const addon = await this.db('meal_addons')
       .where('id', addonId)
       .andWhere('brand_id', brandId)
       .first();
@@ -185,8 +178,7 @@ export class BrandsService {
       throw new NotFoundException('Meal addon does not exist for this brand');
     }
 
-    await this.knex
-      .table('meal_addons')
+    await this.db('meal_addons')
       .where({ id: addonId, brand_id: brandId })
       .del();
 
@@ -200,8 +192,7 @@ export class BrandsService {
       throw new BadRequestException('Brand does not exist.');
     }
 
-    const existingCategory = await this.knex
-      .table('meal_categories')
+    const existingCategory = await this.db('meal_categories')
       .where('name', categoryName)
       .first();
 
@@ -211,8 +202,7 @@ export class BrandsService {
       );
     }
 
-    const mealCategory = await this.knex
-      .table<Category>('meal_categories')
+    const mealCategory = await this.db<Category>('meal_categories')
       .insert({ name: categoryName, brand_id: brandId })
       .returning('*');
 

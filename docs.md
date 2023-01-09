@@ -1,6 +1,7 @@
 # API DOCUMENTATION.
 Live URL: https://foodcourt-pmq6.onrender.com/api
-Docs: 
+
+Docs: https://github.com/devteni/foodcourt-test/blob/main/docs.md
 
 ## AUTH
 ----

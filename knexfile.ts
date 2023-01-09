@@ -9,16 +9,17 @@ const config: { [key: string]: Knex.Config } = {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASS,
-      database: 'foodcourt',
+      database: process.env.DB_NAME || 'foodcourt',
     },
   },
 
   staging: {
     client: 'postgresql',
     connection: {
-      database: 'my_db',
-      user: 'username',
-      password: 'password',
+      host: process.env.DB_HOST,
+      user: process.env.DB_USER,
+      password: process.env.DB_PASS,
+      database: process.env.DB_NAME || 'foodcourt',
     },
     pool: {
       min: 2,
@@ -35,7 +36,7 @@ const config: { [key: string]: Knex.Config } = {
       host: process.env.DB_HOST,
       user: process.env.DB_USER,
       password: process.env.DB_PASS,
-      database: 'foodcourt',
+      database: process.env.DB_NAME,
     },
     pool: {
       min: 2,

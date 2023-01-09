@@ -12,7 +12,7 @@
     "start": "nest start",
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
-    "start:prod": "node dist/main",
+    "start:prod": "node dist/src/main",
     "migrate:init": "npx knex init -x ts",
     "migrate:make": "npx knex migrate:make",
     "migrate:rollback": "npx knex migrate:rollback",

@@ -30,7 +30,7 @@ console.log(process.env.DB_USER);
           port: parseInt(DB_PORT, 10),
           user: DB_USER,
           password: DB_PASS,
-          database: 'foodcourt',
+          database: process.env.DB_NAME,
         },
       },
     }),

@@ -1,5 +1,6 @@
 # API DOCUMENTATION.
-Live URL: 
+Live URL: https://foodcourt-pmq6.onrender.com/api
+Docs: 
 
 ## AUTH
 ----

@@ -1,3 +1,12 @@
+# ADMIN LOGIN CREDENTIALS
+The database has been seed with admin login creds.
+```
+{
+  "email": "fatunmbiteniola1@gmail.com"
+  "password": "pass123"
+}
+ ```
+ 
 # API DOCUMENTATION.
 Live URL: https://foodcourt-pmq6.onrender.com/api
 
@@ -32,7 +41,8 @@ Account creation and login.
 
   * **Code:** 201 <br />
     **Content:** 
-      ```{
+      ```
+      {
           "message": "User created successfully",
           "data": {
             "email": "teniolafatunmbi@gmail.com",
@@ -58,7 +68,8 @@ Account creation and login.
       ```
   * **Code:** 422 UNPROCESSABLE ENTITY <br />
     **Content:** 
-    ```{
+    ```
+    {
             "statusCode": 422,
             "message": [
               "email must be an email",
@@ -140,7 +151,8 @@ Endpoints for brands related operations
 
   * **Code:** 201 <br />
     **Content:** 
-      ```[
+      ```
+      [
             {
               "id": 4,
               "name": "Chicken Republick",
@@ -170,7 +182,8 @@ Endpoints for brands related operations
 
   * **Code:** 422 UNPROCESSABLE ENTITY <br />
     **Content:** 
-    ```{
+    ```
+    {
             "statusCode": 422,
             "message": ["name must be a string"],
             "error": "Unprocessable Entity"
@@ -214,7 +227,8 @@ Endpoints for brands related operations
 
   * **Code:** 201 <br />
     **Content:** 
-    ```{
+    ```
+    {
         "message": 'Addon created successfully',
         "data": {
             "id": 3,
@@ -230,7 +244,8 @@ Endpoints for brands related operations
 * **Error Response:**
 
   * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** ```
+    **Content:** 
+    ```
               {
               "statusCode": 401,
               "message": "Unauthorized"
@@ -239,7 +254,8 @@ Endpoints for brands related operations
 
   * **Code:** 400 BAD REQUEST <br />
     **Content:** 
-    ```{
+    ```
+         {
             "statusCode": 400,
             "message": "Brand does not exist",
             "error": "Bad Request"
@@ -248,7 +264,8 @@ Endpoints for brands related operations
 
   * **Code:** 409 CONFLICT <br />
     **Content:** 
-    ```{
+    ```
+        {
             "statusCode": 409,
             "message": "Meal Addon already exists for this brand.",
             "error": "Conflict"
@@ -257,7 +274,8 @@ Endpoints for brands related operations
 
   * **Code:** 422 UNPROCESSABLE ENTITY <br />
     **Content:** 
-    ```{
+    ```
+        {
             "statusCode": 422,
             "message": [
               "name must be a string",
@@ -292,7 +310,8 @@ Endpoints for brands related operations
 
   * **Code:** 200 <br />
     **Content:** 
-    ```{
+    ```
+      {
         data: {
             items: [
                 {
@@ -314,7 +333,8 @@ Endpoints for brands related operations
 * **Error Response:**
   * **Code:** 400 BAD REQUEST <br />
     **Content:** 
-    ```{
+    ```
+      {
             "statusCode": 400,
             "message": "Brand does not exist",
             "error": "Bad Request"
@@ -351,7 +371,8 @@ Endpoints for brands related operations
 
   * **Code:** 200 <br />
     **Content:** 
-    ```{
+    ```
+      {
         "data": {
             "id": 3,
             "name": "Addon 1",
@@ -366,7 +387,8 @@ Endpoints for brands related operations
 * **Error Response:**
   * **Code:** 400 BAD REQUEST <br />
     **Content:** 
-    ```{
+    ```
+      {
             "statusCode": 400,
             "message": "Brand does not exist"
             "error": "Bad Request"
@@ -383,7 +405,8 @@ Endpoints for brands related operations
 
   * **Code:** 404 NOT FOUND <br />
     **Content:** 
-    ```{
+    ```
+      {
             "statusCode": 404,
             "message": "Meal addon does not exist for this brand"
             "error": "Not Found"
@@ -419,7 +442,8 @@ Endpoints for brands related operations
 
   * **Code:** 200 <br />
     **Content:** 
-    ```{
+    ```
+      {
         "message": 'Addon updated successfully',
         "data": {
             "id": 3,
@@ -435,7 +459,8 @@ Endpoints for brands related operations
 * **Error Response:**
   * **Code:** 400 BAD REQUEST <br />
     **Content:** 
-    ```{
+    ```
+      {
             "statusCode": 400,
             "message": "Brand does not exist"
             "error": "Bad Request"
@@ -443,7 +468,8 @@ Endpoints for brands related operations
     ```
 
   * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** ```
+    **Content:** 
+    ```
               {
               "statusCode": 401,
               "message": "Unauthorized"
@@ -452,7 +478,8 @@ Endpoints for brands related operations
 
   * **Code:** 404 NOT FOUND <br />
     **Content:** 
-    ```{
+    ```
+      {
             "statusCode": 404,
             "message": "Meal addon does not exist for this brand"
             "error": "Not Found"
@@ -461,7 +488,8 @@ Endpoints for brands related operations
 
   * **Code:** 422 UNPROCESSABLE ENTITY <br />
     **Content:** 
-    ```{
+    ```
+      {
             "statusCode": 422,
             "message": [
               "name must be a string",
@@ -494,7 +522,8 @@ Endpoints for brands related operations
 
   * **Code:** 200 <br />
     **Content:** 
-    ```{
+    ```
+      {
         "message": "Addon with name Chicken Republic deleted successfully"
       }
     ```
@@ -502,7 +531,8 @@ Endpoints for brands related operations
 * **Error Response:**
   * **Code:** 400 BAD REQUEST <br />
     **Content:** 
-    ```{
+    ```
+      {
             "statusCode": 400,
             "message": "Brand does not exist"
             "error": "Bad Request"
@@ -510,8 +540,9 @@ Endpoints for brands related operations
     ```
 
   * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** ```
-              {
+    **Content:** 
+    ```
+           {
               "statusCode": 401,
               "message": "Unauthorized"
             }
@@ -519,7 +550,8 @@ Endpoints for brands related operations
 
   * **Code:** 404 NOT FOUND <br />
     **Content:** 
-    ```{
+    ```
+        {
             "statusCode": 404,
             "message": "Meal addon does not exist for this brand"
             "error": "Not Found"
@@ -549,7 +581,8 @@ Endpoints for brands related operations
 
   * **Code:** 201 <br />
     **Content:** 
-    ```{
+    ```
+      {
         data: { 
                 "id": 4,
                 "name": "Whiskey",
@@ -562,7 +595,8 @@ Endpoints for brands related operations
 * **Error Response:**
   * **Code:** 400 BAD REQUEST <br />
     **Content:** 
-    ```{
+    ```
+        {
             "statusCode": 400,
             "message": "Brand does not exist"
             "error": "Bad Request"
@@ -570,8 +604,9 @@ Endpoints for brands related operations
     ```
 
   * **Code:** 401 UNAUTHORIZED <br />
-    **Content:** ```
-              {
+    **Content:** 
+      ```
+          {
               "statusCode": 401,
               "message": "Unauthorized"
             }
@@ -579,7 +614,8 @@ Endpoints for brands related operations
 
   * **Code:** 409 CONFLICT <br />
     **Content:** 
-    ```{
+    ```
+        {
             "statusCode": 409,
             "message": "Meal Category already exists for this brand.",
             "error": "Conflict"
@@ -588,7 +624,8 @@ Endpoints for brands related operations
 
   * **Code:** 422 UNPROCESSABLE ENTITY <br />
     **Content:** 
-    ```{
+    ```
+        {
             "statusCode": 400,
             "message": ["name must be a string"],
             "error": "Unprocessable Entity"

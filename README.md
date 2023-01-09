@@ -22,6 +22,9 @@
         yarn start:dev
     ```
 
+## DATABASE SEEDING.
+For quicker testing, you can seed the db with sample brands with `yarn run db:seed`.
+
 - Visit http://localhost:3000 on your HTTP client to test
 - API documentation in docs.md
 

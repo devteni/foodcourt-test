@@ -153,14 +153,48 @@ export class BrandsService {
       throw new NotFoundException('Meal addon does not exist for this brand');
     }
 
-    const updatedAddon = await this.db('meal_addons')
+    let categoryId: string | number | null = null;
+    let categoryName: string | null = null;
+
+    if (updateMealDto.category) {
+      // check if category exists
+      const existingCategory = await this.db<Category>('meal_categories')
+        .where({
+          name: updateMealDto.category,
+          brand_id: brandId,
+        })
+        .first();
+
+      if (existingCategory) {
+        categoryId = existingCategory.id;
+        categoryName = existingCategory.name;
+      } else {
+        const newCategory = await this.db('meal_categories')
+          .returning('*')
+          .insert({
+            name: updateMealDto.category.toLocaleLowerCase(),
+            brand_id: brandId,
+          });
+
+        categoryId = newCategory[0]['id'];
+        categoryName = newCategory[0]['name'];
+      }
+    }
+
+    const updatedAddon = await this.db<Addon>('meal_addons')
       .returning('*')
       .where({ id: addonId })
       .update({
-        ...updateMealDto,
+        name: updateMealDto.name,
+        price: updateMealDto.price,
+        brand_id: brandId,
+        category_id: categoryId,
       });
 
-    return { message: 'Addon updated successfully', data: updatedAddon[0] };
+    return {
+      message: 'Addon updated successfully',
+      data: { ...updatedAddon[0], category_name: categoryName },
+    };
   }
 
   async removeBrandMeal(brandId: number, addonId: number) {

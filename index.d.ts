@@ -1,14 +1,14 @@
 import { Role } from 'src/auth/enums/role.enum';
 
 interface User {
-  id?: string;
+  id?: string | number;
   email: string;
   password: string;
   role: Role;
 }
 
 interface Addon {
-  id?: string;
+  id?: string | number;
   name: string;
   description: string;
   price: number;
@@ -17,13 +17,13 @@ interface Addon {
 }
 
 interface Category {
-  id?: string;
+  id?: string | number;
   name: string;
   brand_id?: number;
 }
 
 interface Brand {
-  id?: string;
+  id?: string | number;
   name: string;
 }
 
